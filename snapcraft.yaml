@@ -1,0 +1,46 @@
+name: appimage2deb
+base: core22
+version: '1.0.0'
+summary: S
+description: |
+  D
+
+grade: stable
+confinement: strict
+
+parts:
+  node-with-addons:
+    plugin: npm
+    npm-include-node: true
+    npm-node-version: 18.13.0
+    source: https://github.com/dhilt/hello-world-js.git
+
+
+  appimage2deb:
+    plugin: dump
+    source: ./local
+    source-type: local
+    organize:
+      local/appimage2deb: appimage2deb
+    stage-packages:
+      - fakeroot
+      - coreutils # cp
+      - dpkg
+      - binutils # readelf
+      - squashfs-tools # unsquashfs
+    override-prime: |
+      snapcraftctl prime
+      cp usr/bin/fakeroot-sysv usr/bin/fakeroot || echo
+      sed -i 's|PATHS=/usr/lib/|PATHS=$SNAP/usr/lib/|g' usr/bin/fakeroot
+      sed -i 's|FAKEROOT_PREFIX=/usr|FAKEROOT_PREFIX=$SNAP/usr|g' usr/bin/fakeroot
+      sed -i 's|FAKEROOT_BINDIR=/usr/bin|FAKEROOT_BINDIR=$SNAP/usr/bin|g' usr/bin/fakeroot
+
+apps:
+  appimage2deb:
+    command: bin/node --enable-source-maps $SNAP/appimage2deb/main.js
+    environment:
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAP_ARCH_TRIPLET:$SNAP/usr/lib/$SNAP_ARCH_TRIPLET/libfakeroot
+    plugs:
+      - home
+      
+
