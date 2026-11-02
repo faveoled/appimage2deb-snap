@@ -1,5 +1,5 @@
 name: appimage2deb
-base: core22
+base: core26
 version: '1.0.0'
 summary: S
 description: |
@@ -12,7 +12,7 @@ parts:
   node-with-addons:
     plugin: npm
     npm-include-node: true
-    npm-node-version: 18.13.0
+    npm-node-version: 26.13.0
     source: https://github.com/dhilt/hello-world-js.git
 
 
