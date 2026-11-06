@@ -1,6 +1,6 @@
 name: appimage2deb
 base: core26
-version: '1.0.0'
+version: '1.1.0'
 summary: S
 description: |
   D
@@ -29,7 +29,7 @@ parts:
       - binutils # readelf
       - squashfs-tools # unsquashfs
     override-prime: |
-      snapcraftctl prime
+      craftctl default
       cp usr/bin/fakeroot-sysv usr/bin/fakeroot || echo
       sed -i 's|PATHS=/usr/lib/|PATHS=$SNAP/usr/lib/|g' usr/bin/fakeroot
       sed -i 's|FAKEROOT_PREFIX=/usr|FAKEROOT_PREFIX=$SNAP/usr|g' usr/bin/fakeroot
